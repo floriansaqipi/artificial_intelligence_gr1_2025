@@ -12,18 +12,17 @@ Le të jetë $n$ një numër i plotë dhe $L$ një matricë $n × n$. L themi se
 
 Matematikisht:
 1. $l(i,j) ∈ D, D = {1, ..., n}$ 
-2. $j1 != j2 -> l(i,j1) != l(i,j2) (∀i, j1, j2 ∈ D)$ 
-3. $i1 != i2 -> l(i1,j) != l(i2,j) (∀i1, i2, j ∈ D)$ 
+2. $j1 ≠ j2 → l(i,j1) ≠ l(i,j2) (∀i, j1, j2 ∈ D)$ 
+3. $i1 ≠ i2 → l(i1,j) ≠ l(i2,j) (∀i1, i2, j ∈ D)$ 
 
 Pra:
-- $L(n) = {l(i, j) | l(i, j) ∈ D ∧ l(i, j1) != l(i, j2) ∧ l(i1, j) != l(i2, j) (∀i, i1, i2, j, j1, j2 ∈ D) <=> D = {1, ..., n}}$
+- $L(n) = {l(i, j) | l(i, j) ∈ D ∧ l(i, j1) ≠ l(i, j2) ∧ l(i1, j) ≠ l(i2, j) (∀i, i1, i2, j, j1, j2 ∈ D) ↔ D = \{1, ..., n\}}$
 
 - ### Reprezentimi i Problemit:
 
 1. Variablat:
 - Në këtë kontekst matematikor; çdo qelizë e katrorit latin quhet variablël.
 
-!!! kqyre & ni her qita !!!
 2. Domeni i Problemit:
 - Domeni tregon vlerat që mund të marrin variablat, pra numrat e plotë(natyral) nga 1 deri në n
 
