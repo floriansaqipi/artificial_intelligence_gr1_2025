@@ -70,3 +70,4 @@ def iddfs_solve_latin_square(n):
         print(f"\nNo solution found after checking all depths up to {total_cells}.")
         return None
     else:
+        return all_solutions
