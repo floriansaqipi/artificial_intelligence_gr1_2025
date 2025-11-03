@@ -2,13 +2,13 @@
 
 from sys import argv
 from utils import print_latin_square
-from latin_square import solve_latin_square
-
-def main(n):
-    latin_square = [[0] * n for _ in range(n)]
-    solve_latin_square(latin_square, n)
-    print_latin_square(latin_square)
+from latin_square import iddfs_solve_latin_square
     
 if __name__ == "__main__":
-    n = int(argv[1]) if len(argv) > 1 else 5
-    main(n)
+    n = int(argv[1]) if len(argv) > 1 else 3
+    solutions = iddfs_solve_latin_square(n)
+    print(f"\nTotal solutions found for {n}x{n} Latin Square: {len(solutions)}\n")
+    for i, sol in enumerate(solutions):
+        print(f"Solution {i + 1}:")
+        print_latin_square(sol)
+        print()
