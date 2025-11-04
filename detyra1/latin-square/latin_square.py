@@ -1,7 +1,7 @@
 from anytree import Node, RenderTree
 
 import copy
-from utils import is_valid, find_empty_cell
+from utils import is_valid, find_empty_cell, print_latin_square
 
 def _dls(grid, n, depth_limit, current_depth):
     
@@ -27,6 +27,15 @@ def _dls(grid, n, depth_limit, current_depth):
             
             if status == "GOAL":
                 all_solutions_found.extend(results)
+                if len(results) > 1:
+                    print(f"Gjetëm {len(results)} zgjidhje të reja:")
+                else:
+                    print(f"Gjetëm {len(results)} zgjidhje të re:")
+                for i, result in enumerate(results):
+                    print(f"Zgjidhja {i + len(all_solutions_found)}:")
+                    print_latin_square(result)
+                    print("\n")
+                 
             if status == "CUTOFF":
                 cutoff_occurred = True
             
@@ -47,7 +56,7 @@ def iddfs_solve_latin_square(n):
     all_solutions = []
     
     for limit in range(total_cells + 1):
-        print(f"--- Trying with Depth Limit: {limit} ---")
+        print(f"Duke provuar në thellsinë {limit}...")
 
         grid_copy = copy.deepcopy(start_grid)
         
@@ -55,19 +64,17 @@ def iddfs_solve_latin_square(n):
         
         if status == "GOAL":
             if limit == total_cells:
-                print(f"\nFound {len(results)} solutions at depth {limit}!")
+                print(f"\nGjetëm {len(results)} zgjidhje në thellsinë {limit}!")
                 all_solutions.extend(results)
-            else:
-                print(f"...Found {len(results)} partial solutions? (This is unexpected)")
         
         if status == "CUTOFF":
-            print(f"...Search cut off at depth {limit}. Exploring deeper.")
+            print(f"Kërkimi u ndalua. Po eksplorojmë më thell...", end='\n--\n')
         
         if status == "FAILURE":
-            print("...Branch failed.")
+            print("Dega dështoi.")
     
     if not all_solutions:
-        print(f"\nNo solution found after checking all depths up to {total_cells}.")
+        print(f"\nAsnjë zgjidhje nuk u gjet. Kërkuam deri në thellsinë {total_cells}.")
         return None
     else:
         return all_solutions
