@@ -65,7 +65,7 @@ def pure_dfs_social_golfers(G=8, S=4, W=9):
                 pairs_used.add(pk)
                 new_pairs.append(pk)
 
-            if place(w, gi, si + 1, used_this_week):
+            if week_feasible(w, used_this_week) and place(w, gi, si + 1, used_this_week):
                 return True
 
             for pk in new_pairs:
