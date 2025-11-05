@@ -2,9 +2,12 @@
 
 from sys import argv
 from sudoku_board import SudokuBoard
+from solution import bfs_with_pruning
 
-def main(grid):
-   print("duke zgjidhur sudoku me bfs...") 
+def main(board: SudokuBoard) -> SudokuBoard:
+    print("duke zgjidhur sudoku me bfs...\n") 
+    board = bfs_with_pruning(board) 
+    return board
 
 if __name__ == "__main__":
     easy_grid = [
@@ -57,6 +60,6 @@ if __name__ == "__main__":
 
     board = SudokuBoard(grid_to_solve)
     print(f"Boardi fillestar eshte:\n{board}\n")
-
-    board.set_cell(0, 2, 4)
-    print(f"Boardi pas vendosjes se 4 ne koordinatat (1, 3):\n{board}\n")
+    
+    solved = main(board)
+    print(f"Boardi pas zgjidhjes eshte:\n{board}\n")
