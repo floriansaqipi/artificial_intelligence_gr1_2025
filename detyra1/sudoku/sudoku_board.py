@@ -36,23 +36,3 @@ class SudokuBoard:
             if (i + 1) % 3 == 0:
                 lines.append("+-------+-------+-------+")
         return "\n".join(lines)
-
-if __name__ == "__main__":
-    example_grid = [
-        [5, 3, 0, 0, 7, 0, 0, 0, 0],
-        [6, 0, 0, 1, 9, 5, 0, 0, 0],
-        [0, 9, 8, 0, 0, 0, 0, 6, 0],
-        [8, 0, 0, 0, 6, 0, 0, 0, 3],
-        [4, 0, 0, 8, 0, 3, 0, 0, 1],
-        [7, 0, 0, 0, 2, 0, 0, 0, 6],
-        [0, 6, 0, 0, 0, 0, 2, 8, 0],
-        [0, 0, 0, 4, 1, 9, 0, 0, 5],
-        [0, 0, 0, 0, 8, 0, 0, 7, 9],
-    ]
-
-    board = SudokuBoard(example_grid)
-    print(board)
-
-    board.set_cell(0, 2, 4)
-    print("\nAfter setting cell (0, 2) to 4:\n")
-    print(board)
