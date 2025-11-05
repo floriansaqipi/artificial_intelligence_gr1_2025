@@ -62,4 +62,5 @@ if __name__ == "__main__":
     print(f"Boardi fillestar eshte:\n{board}\n")
     
     solved = main(board)
-    print(f"Boardi pas zgjidhjes eshte:\n{board}\n")
+
+    print(f"\nBoardi pas zgjidhjes eshte:\n{solved}\n")
