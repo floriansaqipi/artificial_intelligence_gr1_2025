@@ -1,3 +1,6 @@
+import time
+
+
 def pure_dfs_social_golfers(G=8, S=4, W=9):
     stats = {
         "nodes": 0,  # recursive calls
@@ -120,18 +123,12 @@ def pure_dfs_social_golfers(G=8, S=4, W=9):
                 pairs_used.add(pk)
                 new_pairs.append(pk)
 
-            ok = True
-            if not week_feasible(w, used_this_week):
-                stats["prunes_week_feasible"] += 1
-                ok = False
+            if (
+                    week_feasible(w, used_this_week) and
+                    # partner_budget_feasible(used_this_week) and
 
-            if ok and not partner_budget_feasible(used_this_week):
-                ok = False
-
-            if ok and not golfer_group_feasible(w, used_this_week):
-                ok = False
-
-            if ok and place(w, gi, si + 1, used_this_week, depth + 1):
+                    golfer_group_feasible(w, used_this_week) and
+                    place(w, gi, si + 1, used_this_week, depth + 1)):
                 return True
 
             for pk in new_pairs:
