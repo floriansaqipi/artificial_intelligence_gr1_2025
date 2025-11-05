@@ -43,10 +43,8 @@ def pure_dfs_social_golfers(G=8, S=4, W=9):
     def partner_budget_feasible(used_this_week):
         unassigned = [x for x in range(N) if x not in used_this_week]
         U = len(unassigned)
-        if U == 0:
+        if U <= 1:
             return True
-        if U < S:
-            return False
         for i, x in enumerate(unassigned):
             partners = 0
             for j, y in enumerate(unassigned):
@@ -127,9 +125,13 @@ def pure_dfs_social_golfers(G=8, S=4, W=9):
                 stats["prunes_week_feasible"] += 1
                 ok = False
 
-            if (ok and place(w, gi, si + 1, used_this_week, depth + 1)
-                    and partner_budget_feasible(used_this_week)
-                    and golfer_group_feasible(w, used_this_week)):
+            if ok and not partner_budget_feasible(used_this_week):
+                ok = False
+
+            if ok and not golfer_group_feasible(w, used_this_week):
+                ok = False
+
+            if ok and place(w, gi, si + 1, used_this_week, depth + 1):
                 return True
 
             for pk in new_pairs:
