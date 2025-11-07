@@ -1,19 +1,20 @@
 import time
 
 
-def pure_dfs_social_golfers(G=8, S=4, W=9):
-    stats = {
-        "nodes": 0,  # recursive calls
-        "placements_attempted": 0,  # trying a golfer in a seat
-        "pair_conflicts": 0,  # rejected due to pair already met
-        "backtracks": 0,  # undo after exploring child
-        "prunes_week_feasible": 0,  # S-k forward-check prunes
-        "peak_depth": 0,
-    }
+def pure_dfs_social_golfers(G=8, S=4, W=9, enable_week=True, enable_partner=True, enable_mrv=True,
+                            report_every_nodes=50_000):
 
     N = G * S
     weeks = [[[] for _ in range(G)] for _ in range(W)]
     pairs_used = set()
+
+    stats = {
+        "nodes": 0, "placements_attempted": 0, "backtracks": 0, "pair_conflicts": 0,
+        "prune_week": 0, "prune_partner": 0, "prune_mrv": 0,
+        "peak_depth": 0, "time_s": 0.0, "success": False
+    }
+
+    t0 = time.perf_counter()
 
     def pkey(a, b):
         if a > b: a, b = b, a
@@ -87,10 +88,17 @@ def pure_dfs_social_golfers(G=8, S=4, W=9):
 
     def place(w, gi, si, used_this_week, depth):
         stats["nodes"] += 1
-        if depth > stats["peak_depth"]:
-            stats["peak_depth"] = depth
+        if depth > stats["peak_depth"]: stats["peak_depth"] = depth
+        if report_every_nodes and stats["nodes"] % report_every_nodes == 0:
+            elapsed = time.perf_counter() - t0
+            rate = stats["nodes"] / elapsed if elapsed else 0
+            print(f"[{elapsed:6.2f}s]  nodes={stats['nodes']:,} "
+                  f"week={w}/{W} group={gi}/{G} seat={si}/{S} "
+                  f"backs={stats['backtracks']:,} prunes={stats['prune_week']}/"
+                  f"{stats['prune_partner']}/{stats['prune_mrv']} rate={rate:,.0f}/s")
 
         if w == W:
+            stats["success"] = True
             return True
         if gi == G:
             return place(w + 1, 0, 0, set(), depth + 1)
@@ -123,12 +131,18 @@ def pure_dfs_social_golfers(G=8, S=4, W=9):
                 pairs_used.add(pk)
                 new_pairs.append(pk)
 
-            if (
-                    week_feasible(w, used_this_week) and
-                    # partner_budget_feasible(used_this_week) and
+            ok = True
+            if enable_week and not week_feasible(w, used_this_week):
+                stats["prune_week"] += 1
+                ok = False
+            if ok and enable_mrv and not golfer_group_feasible(w, used_this_week):
+                stats["prune_mrv"] += 1
+                ok = False
+            if ok and enable_partner and not partner_budget_feasible(used_this_week):
+                stats["prune_partner"] += 1
+                ok = False
 
-                    golfer_group_feasible(w, used_this_week) and
-                    place(w, gi, si + 1, used_this_week, depth + 1)):
+            if ok and place(w, gi, si + 1, used_this_week, depth + 1):
                 return True
 
             for pk in new_pairs:
@@ -140,17 +154,28 @@ def pure_dfs_social_golfers(G=8, S=4, W=9):
         return False
 
     ok = place(0, 0, 0, set(), 0)
-    return weeks if ok else None
+    stats["time_s"] = time.perf_counter() - t0
+    return (weeks if ok else None), stats
 
 
 if __name__ == "__main__":
 
     G, S, W = 8, 4, 6
-    schedule = pure_dfs_social_golfers(G, S, W)
-    if schedule is None:
-        print("No schedule found (or search did not finish feasibly).")
-    else:
-        for w, week in enumerate(schedule, 1):
-            print(f"Week {w}:")
-            for g in week:
-                print("  ", g)
+    print("BASELINE (no pruning):")
+    schedule0, s0 = pure_dfs_social_golfers(G, S, W, enable_week=False, enable_partner=False, enable_mrv=False)
+    print(f"ok={s0['success']} time={s0['time_s']:.6f}s nodes={s0['nodes']:,} backs={s0['backtracks']:,}")
+
+    for w, week in enumerate(schedule0, 1):
+        print(f"Week {w}:")
+        for g in week:
+            print("  ", g)
+
+    print("\nWITH PRUNING (S-k + partner@week-start + MRV):")
+    schedule1, s1 = pure_dfs_social_golfers(G, S, W, enable_week=True, enable_partner=False, enable_mrv=True)
+    print(f"ok={s1['success']} time={s1['time_s']:.6f}s nodes={s1['nodes']:,} backs={s1['backtracks']:,} "
+          f"prunes={s1['prune_week']}/{s1['prune_partner']}/{s1['prune_mrv']}")
+
+    for w, week in enumerate(schedule1, 1):
+        print(f"Week {w}:")
+        for g in week:
+            print("  ", g)
