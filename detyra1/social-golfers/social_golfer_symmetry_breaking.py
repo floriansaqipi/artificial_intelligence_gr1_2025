@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 
 import time
+from math import inf
 from typing import List, Optional
 
 
 class SGP:
 
-    def __init__(self, groups: int, group_size: int, weeks: int, report_every_nodes: int = 50_000) -> None:
+    def __init__(self, groups: int, group_size: int, weeks: int, report_every_nodes: int = 50_000,
+                 max_depth_nodes: Optional[int] = None) -> None:
         self.G = groups
         self.P = group_size
         self.W = weeks
         self.N = groups * group_size
+        self.max_depth_nodes = max_depth_nodes
         self.schedule: List[List[List[int]]] = [
             [[-1 for _ in range(self.P)] for _ in range(self.G)]
             for _ in range(self.W)
@@ -90,6 +93,9 @@ class SGP:
     def _solve_week(self, week: int, depth: int) -> bool:
         self._touch_node(depth, week=week, group=0, pos=0)
 
+        if self.max_depth_nodes is not None and depth > self.max_depth_nodes:
+            return False
+
         if week == self.W:
             return True
 
@@ -161,9 +167,9 @@ class SGP:
 
 
 def _demo() -> None:
-    G, P, W = 8, 4, 5
+    G, P, W = 8, 4, 6
     print(f"Demo schedule for {G}-{P}-{W}:\n")
-    solver = SGP(groups=G, group_size=P, weeks=W, report_every_nodes=50_000)
+    solver = SGP(groups=G, group_size=P, weeks=W, report_every_nodes=50_000, max_depth_nodes=inf)
     schedule = solver.solve()
 
     print(
