@@ -13,7 +13,7 @@ Matematikisht:
 1. $m(i,j) ∈ D, D = {1, 2, ..., 9}$ 
 2. $∀i∈{0, 1, ..., 8}, ∀j1​,j2​ ∈ {0, 1, ..., 8}, j1≠j2 ​⇒ m(i,j1​)≠m(i,j2​)$
 3. $∀j∈{0, 1, ..., 8}, ∀i1​,i2​ ∈ {0, 1, ..., 8}, i1≠i2 ​⇒ m(i1,j​)≠m(i2,j​)$
-4. $B(p,q) = {m(i,j) | 3p ≤ i ≤ 3p+2, 3q ≤ j ≤ 3q+2}, p,q ∈ {0, 1, 2}
+4. $B(p,q) = {m(i,j) | 3p ≤ i ≤ 3p+2, 3q ≤ j ≤ 3q+2}, p,q ∈ {0, 1, 2}$\
     $∀(i1,j1), (i2, j2) ∈ B(p,q), (i1,j1)≠(i2,j2) ​⇒ b(i1,j1)≠b(i2,j2)$
 
 Pra:
@@ -34,10 +34,10 @@ Pra:
 #### Në Linux/MacOS apo shumë plotforma tjera të bazuara ne UNIX:
 Në terminalin tuaj, nga ky direktorium, ekzekutoni:
 ```bash
-./sudoku/sudoku_board.py
+./sudoku_board.py
 ```
 #### Në Windows:
 Në terminalin tuaj, nga ky direktorium, ekzekutoni:
 ```powershell
-python .\sudoku\sudoku_board.py
+python .\sudoku_board.py
 ```
