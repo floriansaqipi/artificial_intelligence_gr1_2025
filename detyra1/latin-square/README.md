@@ -1,5 +1,3 @@
-# artificial_intelligence_gr1_2025
-
 ## Latin Square:
 
 - ### Modelimi i Problemit:
@@ -33,10 +31,10 @@ Pra:
 ##### Në Linux/MacOS apo shumë plotforma tjera të bazuara ne UNIX:
 Në terminalin tuaj, nga ky direktorium, ekzekutoni:
 ```bash
-./latin-square/main.py
+./main.py
 ```
 ##### Në Windows:
 Në terminalin tuaj, nga ky direktorium, ekzekutoni:
 ```powershell
-python .\latin-square\main.py
+python .\main.py
 ```
