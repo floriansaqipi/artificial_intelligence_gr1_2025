@@ -1,6 +1,6 @@
-## Latin Square:
+# Latin Square:
 
-- ### Modelimi i Problemit:
+- ## Modelimi i Problemit:
 
 Le të jetë $n$ një numër i plotë dhe $L$ një matricë $n × n$. L themi se është katror latin atëherë dhe vetëm atëherë kur plotësohen kushtet në vijim:
 
@@ -16,7 +16,7 @@ Matematikisht:
 Pra:
 - $L(n) = {l(i, j) | l(i, j) ∈ D ∧ l(i, j1) ≠ l(i, j2) ∧ l(i1, j) ≠ l(i2, j) (∀i, i1, i2, j, j1, j2 ∈ D) ↔ D = \{1, 2, ..., n\}}$
 
-- ### Reprezentimi i Problemit:
+- ## Reprezentimi i Problemit:
 
 1. Variablat:
 - Në këtë kontekst matematikor; çdo qelizë e katrorit latin quhet variabël.
@@ -27,13 +27,13 @@ Pra:
 - ### Implementimi në python me Iterative Deepening Depth-First Search (IDDFS):
 - Është në fajllin ```main.py``` të folderit ```latin-square``` në root të projektit.
 
-#### Ekzekutimi:
-##### Në Linux/MacOS apo shumë plotforma tjera të bazuara ne UNIX:
+### Ekzekutimi:
+#### Në Linux/MacOS apo shumë plotforma tjera të bazuara ne UNIX:
 Në terminalin tuaj, nga ky direktorium, ekzekutoni:
 ```bash
 ./main.py
 ```
-##### Në Windows:
+#### Në Windows:
 Në terminalin tuaj, nga ky direktorium, ekzekutoni:
 ```powershell
 python .\main.py
