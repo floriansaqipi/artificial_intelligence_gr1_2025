@@ -6,22 +6,47 @@ class SudokuBoard:
             self.grid = [list(row) for row in grid]
         else:
             self.grid = [[0 for _ in range(9)] for _ in range(9)]
+        self.last_row = 1
+        self.last_col = 1
 
     def set_cell(self, row, col, value):
-        if not (0 <= row < 9 and 0 <= col < 9):
-            raise ValueError("Row and column must be between 0 and 8.")
+        if not (1 <= row <= 9 and 1 <= col <= 9):
+            raise ValueError("Rreshti dhe kolona duhet te jene mes 1 dhe 9")
         if not (0 <= value <= 9):
-            raise ValueError("Value must be between 0 and 9.")
-        self.grid[row][col] = value
+            raise ValueError(f"Vlera {value} eshte jasht intervalit [0-9].")
+        
+        if value in self.grid[row-1]:
+            raise ValueError(f"Vlera {value} eksiston ne rreshtin {row}")
+
+        for r in range(1, len(self.grid)+1):
+            if value == self.get_cell(r,col):
+                raise ValueError(f"Vlera {value} ekziston ne kolonën {col}")
+
+        big_row = (row - 1) // 3
+        big_col = (col - 1) // 3
+
+        for i in range (1,4):
+            for j in range (1,4):
+                if self.get_cell(big_row * 3 + i, big_col * 3 + j) == value:
+                    raise ValueError(f"Vlera ekziston ne sub-katrorin {big_row * 3 + big_col}")
+
+        self.grid[row - 1][col - 1] = value
 
     def get_cell(self, row, col):
-        if not (0 <= row < 9 and 0 <= col < 9):
-            raise ValueError("Row and column must be between 0 and 8.")
-        return self.grid[row][col]
+        if not (1 <= row <= 9 and 1 <= col <= 9):
+            raise ValueError(f"Row and column must be between 1 and 9. They are {row} and {col}")
+        return self.grid[row-1][col-1]
 
-    def reset(self):
-        """Reset the board to all zeros."""
-        self.grid = [[0 for _ in range(9)] for _ in range(9)]
+    def next_coords(self):
+        #for i in range (self.last_row, 10):
+        #    for j in range (self.last_col, 10):
+        for i in range (1, 10):
+            for j in range (1, 10):
+               if self.get_cell(i, j) == 0:
+                    self.last_row = i
+                    self.last_col = j
+                    return i, j
+        return None
 
     def __str__(self):
         lines = ["+-------+-------+-------+"]
@@ -36,23 +61,3 @@ class SudokuBoard:
             if (i + 1) % 3 == 0:
                 lines.append("+-------+-------+-------+")
         return "\n".join(lines)
-
-if __name__ == "__main__":
-    example_grid = [
-        [5, 3, 0, 0, 7, 0, 0, 0, 0],
-        [6, 0, 0, 1, 9, 5, 0, 0, 0],
-        [0, 9, 8, 0, 0, 0, 0, 6, 0],
-        [8, 0, 0, 0, 6, 0, 0, 0, 3],
-        [4, 0, 0, 8, 0, 3, 0, 0, 1],
-        [7, 0, 0, 0, 2, 0, 0, 0, 6],
-        [0, 6, 0, 0, 0, 0, 2, 8, 0],
-        [0, 0, 0, 4, 1, 9, 0, 0, 5],
-        [0, 0, 0, 0, 8, 0, 0, 7, 9],
-    ]
-
-    board = SudokuBoard(example_grid)
-    print(board)
-
-    board.set_cell(0, 2, 4)
-    print("\nAfter setting cell (0, 2) to 4:\n")
-    print(board)
