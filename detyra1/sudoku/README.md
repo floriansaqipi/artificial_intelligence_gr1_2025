@@ -1,8 +1,6 @@
-# artificial_intelligence_gr1_2025
+# Sudoku:
 
-## Sudoku:
-
-- ### Modelimi i Problemit:
+- ## Modelimi i Problemit:
 
 Le të jetë $M$ një matricë $9 × 9$. Sudoku quhet e vlefshme nëse plotësohen kushtet në vijim:
 
@@ -21,7 +19,7 @@ Matematikisht:
 Pra:
 - $M(9) = m(i,j) | m(i,j) ∈ D ∧ m(i,j1​)≠m(i,j2​) ∧ m(i1​,j)≠m(i2​,j) ∧ m(i1​,j1​)≠m(i2​,j2​), ∀ i,i1​,i2​, j,j1​,j2​ ∈ {1,...,9}$
 
-- ### Reprezentimi i Problemit:
+- ## Reprezentimi i Problemit:
 
 1. Variablat:
 - Në këtë kontekst matematikor; çdo qeli e zbrazët e katrorit 9x9 quhet variabël.
@@ -29,16 +27,16 @@ Pra:
 2. Domeni i Problemit:
 - Domeni tregon vlerat që mund të marrin variablat, pra numrat e plotë(natyral) nga 1 deri në 9
 
-- ### Implementimi në python me Breadth First Search (BFS) dhe Backtracking:
+- ## Implementimi në python me Breadth First Search (BFS) dhe Backtracking:
 - Është në fajllin ```sudoku_board.py``` të folderit ```sudoku``` në root të projektit.
 
-#### Ekzekutimi:
-##### Në Linux/MacOS apo shumë plotforma tjera të bazuara ne UNIX:
+### Ekzekutimi:
+#### Në Linux/MacOS apo shumë plotforma tjera të bazuara ne UNIX:
 Në terminalin tuaj, nga ky direktorium, ekzekutoni:
 ```bash
 ./sudoku/sudoku_board.py
 ```
-##### Në Windows:
+#### Në Windows:
 Në terminalin tuaj, nga ky direktorium, ekzekutoni:
 ```powershell
 python .\sudoku\sudoku_board.py
