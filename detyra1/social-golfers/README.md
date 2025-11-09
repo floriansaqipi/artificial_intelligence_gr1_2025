@@ -1,5 +1,4 @@
-# Write an SGP README in Markdown using $...$ LaTeX-style math (GitHub-compatible) and save it for download
-content = r"""# Social Golfer Problem (SGP)
+# Social golfer problem
 
 ## Modelimi i Problemit
 
