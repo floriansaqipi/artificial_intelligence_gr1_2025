@@ -11,7 +11,7 @@ class KillerSudoku:
     def fetch_board(difficulty: str) -> KillerSudoku:
     """
         përdore naj api me fetch ni json t sudoku boardit
-        edhe ktheje si KillerSudoku
+        edhe ktheje si KillerSudoku (dmth merre si json, parso, edhe thirre kontruktorin me qato vlera!@!@! edhe tani gg osht burd)
     """
         pass
 
