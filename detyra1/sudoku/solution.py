@@ -8,7 +8,6 @@ def bfs_with_pruning(board: SudokuBoard) -> SudokuBoard:
     queue = deque()
 
     queue.append(root)
-    counter = 1
     while queue:
         current_state = queue.popleft()
         coords = current_state.next_coords()

@@ -44,23 +44,6 @@ def pure_dfs_social_golfers(G=8, S=4, W=9, enable_week=True, enable_partner=True
                 return False
         return True
 
-    def partner_budget_feasible(used_this_week):
-        unassigned = [x for x in range(N) if x not in used_this_week]
-        U = len(unassigned)
-        if U <= 1:
-            return True
-        for i, x in enumerate(unassigned):
-            partners = 0
-            for j, y in enumerate(unassigned):
-                if y == x:
-                    continue
-                if pkey(x, y) not in pairs_used:
-                    partners += 1
-                    if partners >= S - 1:
-                        break
-            if partners < S - 1:
-                return False
-        return True
 
     def golfer_group_feasible(w, used_this_week):
         unassigned = [x for x in range(N) if x not in used_this_week]
@@ -138,9 +121,6 @@ def pure_dfs_social_golfers(G=8, S=4, W=9, enable_week=True, enable_partner=True
             if ok and enable_mrv and not golfer_group_feasible(w, used_this_week):
                 stats["prune_mrv"] += 1
                 ok = False
-            if ok and enable_partner and not partner_budget_feasible(used_this_week):
-                stats["prune_partner"] += 1
-                ok = False
 
             if ok and place(w, gi, si + 1, used_this_week, depth + 1):
                 return True
@@ -161,14 +141,14 @@ def pure_dfs_social_golfers(G=8, S=4, W=9, enable_week=True, enable_partner=True
 if __name__ == "__main__":
 
     G, S, W = 8, 4, 6
-    print("BASELINE (no pruning):")
-    schedule0, s0 = pure_dfs_social_golfers(G, S, W, enable_week=False, enable_partner=False, enable_mrv=False)
-    print(f"ok={s0['success']} time={s0['time_s']:.6f}s nodes={s0['nodes']:,} backs={s0['backtracks']:,}")
-
-    for w, week in enumerate(schedule0, 1):
-        print(f"Week {w}:")
-        for g in week:
-            print("  ", g)
+    # print("BASELINE (no pruning):")
+    # schedule0, s0 = pure_dfs_social_golfers(G, S, W, enable_week=False, enable_partner=False, enable_mrv=False)
+    # print(f"ok={s0['success']} time={s0['time_s']:.6f}s nodes={s0['nodes']:,} backs={s0['backtracks']:,}")
+    #
+    # for w, week in enumerate(schedule0, 1):
+    #     print(f"Week {w}:")
+    #     for g in week:
+    #         print("  ", g)
 
     print("\nWITH PRUNING (S-k + partner@week-start + MRV):")
     schedule1, s1 = pure_dfs_social_golfers(G, S, W, enable_week=True, enable_partner=False, enable_mrv=True)
