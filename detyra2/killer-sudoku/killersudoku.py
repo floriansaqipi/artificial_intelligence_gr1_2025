@@ -1,24 +1,71 @@
 from copy import deepcopy
-from dataclass import dataclass
 
 """
     TODO:
-        implement cage check at the end of set_cell()
-        implement fetch_board()
         implement solve()
 """
 
 class KillerSudoku:
-    def fetch_board(board_dict: dict) -> KillerSudoku:
-        return KillerSudoku(board_dict[grid], board_dict[cages])
+    def solve(self) -> KillerSudoku: 
+        stack = []
+        initial_state = deepcopy(self)
+        stack.append(initial_state)
+ 
+        counter = 0
+        while stack:
+            counter += 1
+            current_state = stack.pop()
+            coords = current_state._next_coords()
+            
+            if coords is None:
+                print(f"numruesi:{counter}")
+                return current_state
 
-   def __init__(self, grid=None: list[list[int]], cages=None: tuple[int, int]):
+            next_x, next_y = coords
+            
+            for val in range (1,10):
+                next_state = deepcopy(current_state)
+                try:
+                    next_state._set_cell(next_x, next_y, val)
+                    stack.append(next_state)
+                except (CageException, ValueError) as e:
+                    continue
+
+    @staticmethod
+    def fetch_board(board_dict: dict) -> KillerSudoku:
+        try:
+            KillerSudoku._verify_cages(board_dict)
+            return KillerSudoku(board_dict["grid"], board_dict["cages"])
+        except CageException as ce:
+            print(f"Exception:\n{ce}")
+            exit(2)
+    
+    @staticmethod
+    def _verify_cages(board_dict: dict) -> None:
+        """
+            Verifies the sum of all cages (must be 405) and whether there is the same cell in 2 cages
+
+            Raises:
+                CageException: If 1 of the 2 conditions is not met
+        """
+        cages = board_dict["cages"]
+        total_sum = sum(cage["total"] for cage in cages)
+        cells = [cell for cage in cages for cell in cage["cells"]]
+        
+        if total_sum != 405:
+            raise CageException("Kafaze jo-valide. (shuma)")
+        
+        if len(cells) != len(set(map(tuple, cells))):
+            raise CageException("Kafaze jo-valide. (qelula duplikate)")
+
+
+    def __init__(self, grid: list[list[int]]=None, cages: tuple[int, int]=None):
         self.grid = deepcopy(grid)
         self.cages = deepcopy(cages)
         self.lastRow = 1
         self.lastCol = 1
 
-    def set_cell(self, row: int, col: int, value: int) -> void:
+    def _set_cell(self, row: int, col: int, value: int) -> None:
         # bounds and value check
         if not (1 <= row <= 9 and 1 <= col <= 9):                                               
             raise ValueError("Rreshti dhe kolona janë jasht intervalit [0-9].")                    
@@ -31,7 +78,7 @@ class KillerSudoku:
                    
         # col check
         for r in range(1, len(self.grid)+1):                                                    
-            if value == self.get_cell(r,col):                                                   
+            if value == self._get_cell(r,col):                                                   
                 raise ValueError(f"Vlera {value} ekziston ne kolonën {col}.")                    
         
         # sub grid check
@@ -40,40 +87,69 @@ class KillerSudoku:
                                                                                                 
         for i in range (1,4):                                                                   
             for j in range (1,4):                                                               
-                if self.get_cell(big_row * 3 + i, big_col * 3 + j) == value:                    
+                if self._get_cell(big_row * 3 + i, big_col * 3 + j) == value:                    
                     raise ValueError(f"Vlera ekziston në nën-katrorin {big_row * 3 + big_col}.")
 
         # cage check
         """
-            merre vleren e cageit,
-            merre ni list t kordinatave t cageit si touples,
-            for touple in list
-                shuma += itemi n qito coords
-            if shuma != cage.shuma
-                rasie ValueError(f"Kushti i limitit të shumës së elementeve të kafazit është thyer.")
+            board: {
+                grid: [
+                    [11, 12, 13, 14, 15, 16, 17, 18, 19],
+                    [21, 22, 23, 24, 25, 26, 27, 28, 29],
+                    [31, 32, 33, 34, 35, 36, 37, 38, 39],
+                    [41, 42, 43, 44, 45, 46, 47, 48, 49],
+                    [51, 52, 53, 54, 55, 56, 57, 58, 59],
+                    [61, 62, 63, 64, 65, 66, 67, 68, 69],
+                    [71, 72, 73, 74, 75, 76, 77, 78, 79],
+                    [81, 82, 83, 84, 85, 86, 87, 88, 89],
+                    [91, 92, 93, 94, 95, 96, 97, 98, 99],
+                ],
+                cages: [
+                    {total: int, cells: [[xi1,yi1] [xi2, yi2], ..., [xiN, yiN]},
+                    .
+                    .
+                    .
+                    {total: int, cells: [[xX1,yX1] [xX2, yX2], ..., [xXN, yXN]},
+                ]
+            }
         """
+        
+        for i, cage in enumerate(self.cages):
+            if [row, col] not in cage["cells"]:
+                continue
+
+            # check cage total
+            total = cage["total"]
+            cells = cage["cells"]
+            local_sum = sum(self._get_cell(cell[0],cell[1]) for cell in cells)
+            
+            if local_sum + value > total:
+                raise CageException(f"Totali i kafazit {i}, i cili është {total}, është kaluar. Vlera aktuale: {local_sum + value}.")
+            
+            # check unique nums in cage
+            for cell in cells:
+                cell_value = self._get_cell(cell[0], cell[1])
+                if cell_value == value:
+                    raise CageException(f"Vlera {value} ekziston në kafaz")
+                if local_sum + value > cage["total"]:
+                    raise CageException(f"Vlera e kafazit është kaluar.")
+
                                                                                             
         self.grid[row - 1][col - 1] = value                                                     
                                                                                         
-    def get_cell(self, row: int, col: int) -> int:
+    def _get_cell(self, row: int, col: int) -> int:
         if not (1 <= row <= 9 and 1 <= col <= 9):
             raise ValueError(f"Rreshti dhe kolona duhet të jenë mes 1 dhe 9. Ata janë {row} dhe {col}.")
         return self.grid[row-1][col-1]
 
-    def next_coords(self) -> tuple[int, int]:
+    def _next_coords(self) -> tuple[int, int]:
         for i in range (1, 10):
             for j in range (1, 10):
-               if self.get_cell(i, j) == 0:
+               if self._get_cell(i, j) == 0:
                     self.last_row = i
                     self.last_col = j
                     return i, j
         return None
-
-    def solve(self) -> KillerSudoku:
-        """
-            bon dfs ose diqka për me solve, bazohu n ata t kalumen
-        """
-        pass
 
     def __str__(self) -> str:
         lines = ["+-------+-------+-------+"]               
@@ -88,12 +164,7 @@ class KillerSudoku:
             if (i + 1) % 3 == 0:                            
                 lines.append("+-------+-------+-------+")   
         return "\n".join(lines)
-    
-    @dataclass
-    class Cage:
-        cells: list[tuple[int, int]]
-        total: int
-        
-        @dataclass Cell:
-            x: int
-            y: int
+
+class CageException(Exception):
+    """Raised when a killer sudoku board has invalid cage structure."""
+    pass
