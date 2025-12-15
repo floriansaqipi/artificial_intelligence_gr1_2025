@@ -213,3 +213,6 @@ __marimo__/
 # per vim
 *.swp
 *~
+
+*/killer-sudoku/sudoku/
+
