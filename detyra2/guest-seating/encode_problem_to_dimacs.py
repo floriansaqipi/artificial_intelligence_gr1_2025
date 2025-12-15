@@ -43,25 +43,25 @@ def build_cnf(p: SeatingProblem) -> CNF:
 
     cnf = CNF()
     G, T = p.guests, p.tables
-    top_id = G * T  # main vars are 1..1000
+    top_id = G * T
 
-    # Exactly one table per guest
+    # Every guest should sit at least at one table and at most at one table
     for g in range(1, G + 1):
         lits = [var_id(g, t, T) for t in range(1, T + 1)]
-        cnf.append(lits)  # at least one
+        cnf.append(lits)
         top_id = add_atmost(cnf, lits, 1, top_id, p.card_encoding)
 
-    # Capacity per table: AtMost 10 (=> exactly 10 because total seats = guests)
+    # At Most 10 guests at each table
     for t in range(1, T + 1):
         lits = [var_id(g, t, T) for g in range(1, G + 1)]
         top_id = add_atmost(cnf, lits, p.capacity, top_id, p.card_encoding)
 
-    # Not-together pairs
+    # Groups that must not sit together
     for a, b in p.not_together:
         for t in range(1, T + 1):
             cnf.append([-var_id(a, t, T), -var_id(b, t, T)])
 
-    # Together groups (leader equivalence)
+    # Groups that must sit together
     for grp in p.together_groups:
         if len(grp) < 2:
             continue
@@ -71,8 +71,8 @@ def build_cnf(p: SeatingProblem) -> CNF:
                 cnf.append([-var_id(leader, t, T),  var_id(k, t, T)])
                 cnf.append([-var_id(k, t, T),       var_id(leader, t, T)])
 
-    # Gender balance per table: AtMost upper for males AND females
-    upper = (p.capacity + p.gender_diff) // 2  # 6
+    # Gender balance rule
+    upper = (p.capacity + p.gender_diff) // 2
     males = [g for g in range(1, G + 1) if g % 2 == 0]
     females = [g for g in range(1, G + 1) if g % 2 == 1]
 
@@ -84,12 +84,23 @@ def build_cnf(p: SeatingProblem) -> CNF:
 
 
 def main() -> None:
-    # Fill these with YOUR constraints
     not_together = [
-        # (1, 5), (2, 9),
+        (1, 5), (1, 7), (2, 9), (2, 10),
+        (3, 14), (4, 16), (6, 8), (11, 13),
+        (15, 20), (17, 19), (18, 21), (22, 25),
+        (23, 24), (26, 30), (27, 29), (28, 31),
+        (32, 35), (33, 34), (36, 40), (37, 39),
+        (41, 45), (42, 44), (46, 50), (47, 49),
     ]
+
     together_groups = [
-        # (10, 11, 12),
+        (10, 11, 12),
+        (30, 31, 32),
+        (50, 51, 52),
+        (70, 71, 72),
+        (90, 91, 92),
+        (3, 4),
+        (25, 26),
     ]
 
     p = SeatingProblem(
