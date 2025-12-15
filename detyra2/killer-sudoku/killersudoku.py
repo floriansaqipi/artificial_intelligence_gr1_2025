@@ -1,4 +1,5 @@
 from copy import deepcopy
+from dataclass import dataclass
 
 """
     TODO:
@@ -8,12 +9,8 @@ from copy import deepcopy
 """
 
 class KillerSudoku:
-    def fetch_board(difficulty: str) -> KillerSudoku:
-    """
-        përdore naj api me fetch ni json t sudoku boardit
-        edhe ktheje si KillerSudoku (dmth merre si json, parso, edhe thirre kontruktorin me qato vlera!@!@! edhe tani gg osht burd)
-    """
-        pass
+    def fetch_board(board_dict: dict) -> KillerSudoku:
+        return KillerSudoku(board_dict[grid], board_dict[cages])
 
    def __init__(self, grid=None: list[list[int]], cages=None: tuple[int, int]):
         self.grid = deepcopy(grid)
@@ -90,4 +87,13 @@ class KillerSudoku:
             lines.append(line)                              
             if (i + 1) % 3 == 0:                            
                 lines.append("+-------+-------+-------+")   
-        return "\n".join(lines)                 
+        return "\n".join(lines)
+    
+    @dataclass
+    class Cage:
+        cells: list[tuple[int, int]]
+        total: int
+        
+        @dataclass Cell:
+            x: int
+            y: int
