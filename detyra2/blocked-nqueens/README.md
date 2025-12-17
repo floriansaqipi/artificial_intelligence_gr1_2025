@@ -92,12 +92,11 @@ Ku:
 ### 3. Dendësia e fushave të sulmuara
 
 $$
-  h_3(V_k)=\frac{\displaystyle \sum_{i=1}^{N} |E| - |F_b| - |F_s|}{|E| - |F_b|}
+  h_3(V_k)=\frac{\displaystyle |N^2| - |F_b| - |F_s|}{|E| - |F_b|}
 $$
 
 Ku:
 <ul>
-  <li>$E$ &xrarr; bashkësia e degëve</li>
   <li>$F_b$ &xrarr; bashkësia e fushave të bllokuara</li>
   <li>$F_b$ &xrarr; bashkësia e fushave të sigurta (pasulmuara)</li>
 </ul>
