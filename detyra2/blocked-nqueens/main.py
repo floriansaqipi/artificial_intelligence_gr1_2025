@@ -14,10 +14,13 @@ if __name__ == "__main__":
         try:
             i = int(arg[0])
             j = int(arg[1])
-            if 1<=i<=8 and 1<=j<=8:
+            
+            if (i,j) in blocked_cells:
+                continue
+            elif 1<=i<=N and 1<=j<=N: 
                 blocked_cells.append((i, j))
             else:
-                print(f"Gabim: i={i} ose j={j} janë jasht intervalit 1-8.")
+                print(f"Gabim: i={i} ose j={j} janë jasht intervalit [1-{N}].")
                 exit(2)
         except ValueError:
             print(f"Gabim: i={arg[1]} ose j={arg[0]} nuk janë numra valid.")
@@ -32,6 +35,7 @@ if __name__ == "__main__":
 
     print(f"{hr}\nTabela para zgjidhjes:\n{board}\n{hr}\n")
     
-    board = board.solve()
+    for i, qcol in enumerate(board.solve()):
+        board.cells[i][qcol] = "Q"
     
     print(f"\n{hr}\nTabela pas zgjidhjes:\n{board}\n{hr}\n")
