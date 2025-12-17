@@ -2,7 +2,7 @@
 
 # Problemi:
 
-Përshkrimin e gjeni [këtu](https://dtai.cs.kuleuven.be/events/ASP-competition/Benchmarks/BlockedQueens.shtm).
+Përshkrimin e gjeni [këtu](https://dtai.cs.kuleuven.be/events/ASP-competition/Benchmarks/BlockedQueens.shtml).
 
 Kërkesat e detyrës:
 <ul>
