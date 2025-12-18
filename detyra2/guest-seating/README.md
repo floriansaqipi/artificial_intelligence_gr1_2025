@@ -9,7 +9,7 @@ Kemi **100 mysafirë** dhe **10 tavolina**, secila me **10 ulëse**. Qëllimi ë
 - disa çifte mysafirësh **nuk guxojnë** të ulen në të njëjtën tavolinë (*not-together*);
 - disa grupe mysafirësh **duhet** të ulen në të njëjtën tavolinë (*together*);
 - **balanca e gjinisë**: ID-të **çift** janë meshkuj, ID-të **tek** janë femra, dhe për çdo tavolinë vlen  
-  $|\#M - \#F| \le 3$. Me kapacitet 10, kjo lejon vetëm ndarjet: **4/6**, **5/5**, **6/4**.
+  $|M - F| \le 3$. Me kapacitet 10, kjo lejon vetëm ndarjet: **4/6**, **5/5**, **6/4**.
 
 ---
 
