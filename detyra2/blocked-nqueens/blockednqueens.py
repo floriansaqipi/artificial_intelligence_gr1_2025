@@ -3,70 +3,90 @@ import heapq
 
 class BlockedNQueens:
 
-    def __init__(self,N: int = 1, blocked_cells: list[tuple[int,int]] = None):
-        self.k = 0
+    def __init__(
+            self,
+            blocked_cells: list[tuple[int,int]] = None,
+            N: int = 1,
+            state: tuple = () 
+            ):
         self.N = N
-        self.cells = [["." for _ in range(N)] for _ in range(N)] 
-        for cell in blocked_cells:
-            i, j = cell
-            self.cells[i-1][j-1] = "X"
+        self.state = state
+        self.blocked_cells = blocked_cells
 
     def solve(self) -> bool:
-        start = ()
-        pq = [] # (f, g, state)
-        heapq.heappush(pq, (self._h(), 0, start))
+        root_state = deepcopy(self)
+        pqueue = []
+        heapq.heappush(pqueue, (root_state.f(), root_state.g(), root_state))
 
-        best_g = {start: 0}
+        best_g = {root_state: 0}
+        return_flag = False
+        
+        while pqueue:
+            f, g, curr_state = heapq.heappop(pqueue)
+            
+            if g == self.N:
+                return_flag = True
+                break
 
-        while pq:
-            f, g, state = heapq.heappop(pq)
-    
-            row = state.k
-            if row == N:
-                for i, queen_index state:
-                    self.cells[i][queen_index] = "Q"
-                return True
+            for col in curr_state.legal_columns():
+                nxt = BlockedNQueens(
+                        blocked_cells=self.blocked_cells,
+                        N=self.N,
+                        state=curr_state.state + (col,)
+                        )
 
-            for col in state._legal_columns():
-                nxt = state.cells + (col,)
-                nxt_g = nxt._g()
+                if nxt.g() < best_g.get(nxt, float("inf")):
+                    best_g[nxt] = nxt.g()
+                    heapq.heappush(pqueue, (nxt.f(), nxt.g(), nxt)) 
+        
+        self.state = curr_state.state
+        return return_flag
 
-                if nxt_g < best_g.get(nxt, float("inf")):
-                    best_g[nxt] = nxt_g
-                    nxt_f = nxt._f()
-                    heapq.heappush(pq, (nxt_f, nxt_g, nxt))
+    def f(self): # funksioni vlersus
+        return self.g() + self.h()
 
-        return False
+    def g(self): # cost funksioni
+        return len(self.state)
 
-    def _f(self):
-        return self._g() + self._h()
-
-    def _g(self):
-        return self.k
-
-    def _h(self):
-        for row in range(self.k, self.N):
-            if not self._legal_columns():
+    def h(self): # funksioni heuristik 
+                 # - numri i rreshtave t'bllokum
+        for row in range(len(self.state), self.N):
+            if not self.legal_columns():
                 return float("inf")
-        return N - k
+        return self.N - len(self.state)
 
-    def _legal_columns(self):
+    def legal_columns(self): # 
         legal_cols = []
-        row = self.k
+        row = len(self.state)
+        
         for col in range(self.N):
-            if self.cells[row][col] == "X":
+            if (row, col) in self.blocked_cells:
                 continue
-            for r, c in enumerate(self.cells):
-                if c == col or abs(row-r) == abs(col-c):
-                    return None
-            legal_cols.append(col)
+
+            ok = True
+            for r, c in enumerate(self.state):
+                if col == c or abs(row-r) == abs(col-c):
+                    ok = False
+                    break
+            if ok:
+                legal_cols.append(col)
+
         return legal_cols
 
     def __str__(self) -> str:
+        grid = [[".\t" for _ in range(self.N)] for _ in range(self.N)]
+        
+        for row, col in enumerate(self.state):
+            grid[row][col] = "Q\t"
+        
+        for row, col in self.blocked_cells:
+            grid[row][col] = "X\t"
+       
         lines = []
-        for row in self.cells:
-            line = []
-            for cell in row:
-                line.append(f"{cell}\t")
-            lines.append("".join(line))
+        for row in grid:
+            lines.append("".join(row))
+        
         return "\n".join(lines)
+
+    def __lt__(self, other) -> bool:
+        return (self.state < other.state)
