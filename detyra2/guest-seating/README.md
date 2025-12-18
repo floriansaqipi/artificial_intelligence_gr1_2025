@@ -142,7 +142,7 @@ $$
 
 ### B) AtMostOne (versioni pairwise, konceptualisht i thjeshtë)
 $$
-\forall t_1<t_2:\ (\neg x_{g,t_1} \vee \neg x_{g,t_2})
+\forall t_1 < t_2:\ (\neg x_{g,t_1} \vee \neg x_{g,t_2})
 $$
 
 ### C) Not-together për $(a,b)$
