@@ -209,3 +209,10 @@ __marimo__/
 # macos / zip
 .DS_Store
 *.zip
+
+# per vim
+*.swp
+*~
+
+*/killer-sudoku/sudoku/
+
