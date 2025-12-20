@@ -157,7 +157,7 @@ Kjo do të thotë:
 
 #### 1A) AtLeastOne për mysafirin $g$
 
-“$g$ duhet të jetë diku”:
+$g$ duhet të jetë diku:
 
 $$
 x_{g,1} \vee x_{g,2} \vee \cdots \vee x_{g,10}
@@ -167,7 +167,7 @@ Këtë klauzolë e vendosim për **çdo** $g \in \{1,\dots,100\}$.
 
 #### 1B) AtMostOne për mysafirin $g$ (pairwise)
 
-“$g$ nuk mund të jetë në dy tavolina njëkohësisht”.
+$g$ nuk mund të jetë në dy tavolina njëkohësisht.
 
 Për çdo palë tavolinash $t_1 < t_2$:
 
