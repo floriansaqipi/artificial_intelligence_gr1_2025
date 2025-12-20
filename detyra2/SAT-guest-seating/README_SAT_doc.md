@@ -117,7 +117,7 @@ $$
 \forall t:\quad M_t \le 6 \ \wedge\  F_t \le 6
 $$
 
-Pse duhen **të dyja**? Sepse vetëm “$M_t\le 6$” do lejonte $M_t=0, F_t=10$, që shkel $|M-F|\le 3$. Duke vendosur edhe “$F_t\le 6$”, ekstremet ndalohen dhe mbeten vetëm ndarjet 4/6, 5/5, 6/4.
+Pse duhen **të dyja**? Sepse vetëm $M_t\le 6$ do lejonte $M_t=0, F_t=10$, që shkel $|M-F|\le 3$. Duke vendosur edhe $F_t\le 6$, ekstremet ndalohen dhe mbeten vetëm ndarjet 4/6, 5/5, 6/4.
 
 Në përgjithësi, për kapacitet $C$ dhe diferencë $d$, kufiri sipëror del:
 
